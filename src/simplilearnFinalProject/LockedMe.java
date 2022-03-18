@@ -1,6 +1,11 @@
 package simplilearnFinalProject;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.nio.file.FileSystems;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Scanner;
 
 public class LockedMe {
 
@@ -38,20 +43,78 @@ public class LockedMe {
      * This function will allow user to create file
      */
     public static void createFiles() {
-        System.out.println("Function to allow user to create file in our working directory and add content add content to the file");
+        try{
+            Scanner obj = new Scanner(System.in);
+            String fileName;
+            System.out.println("Please enter new file name: ");
+            fileName = obj.nextLine();
+
+            int lineCounts;
+            System.out.println("Enter number of lines that your file will contain: ");
+            lineCounts = obj.nextInt();
+
+            FileWriter fileWriter = new FileWriter(projectFilesPath + FileSystems.getDefault().getSeparator() + fileName + ".txt");
+
+            //Read line by line from user
+            String customerEntry;
+            for(int i = 0; i < lineCounts; i++){
+                System.out.println("Enter file line: ");
+                customerEntry = obj.nextLine();
+                fileWriter.write( customerEntry + "\n");
+            }
+            fileWriter.close();
+            System.out.println("File created successfully");
+        }catch (Exception ex){
+            System.out.println("Error: "+ ex.getMessage());
+        }
     }
 
     /**
      * This function will allow user to delete a file inside our working directory
      */
     public static void deleteFiles(){
-        System.out.println("Function to delete file");
+        try{
+            Scanner obj = new Scanner(System.in);
+            String fileName;
+            System.out.println("Enter file name to be deleted: ");
+            fileName = obj.nextLine();
+            //Check if file exists
+            if(!checkFileExists(fileName)){
+                System.out.println("File does not exists");
+                return;
+            }
+            //File exists now attempt to delete
+            File f = new File(projectFilesPath + FileSystems.getDefault().getSeparator() + fileName);
+            if(f.delete())
+                System.out.println("File deleted successfully");
+            else
+                System.out.println("Attempted to delete file but failed for some reasons.");
+        }catch (Exception e){
+            System.out.println("Unable to delete file. Please contact administrator");
+        }
     }
 
     /**
      * This function will allow user to search for a file from files inside our working directory
      */
     public static void searchFiles(){
-        System.out.println("Function to search file by accepting user input");
+        Scanner obj = new Scanner(System.in);
+        System.out.println("Enter file name to search in the working directory: ");
+        String fileName;
+        fileName = obj.nextLine();
+        if(checkFileExists(fileName)){
+            System.out.println("File is available");
+        }else{
+            System.out.println("File is not available");
+        }
+    }
+
+    private static boolean checkFileExists(String fileName){
+        ArrayList<String> fileNames = new ArrayList<>();
+        File folder = new File(projectFilesPath);
+        for(File f: Objects.requireNonNull(folder.listFiles())){
+            fileNames.add(f.getName());
+        }
+        return fileNames.contains(fileName);
     }
 }
