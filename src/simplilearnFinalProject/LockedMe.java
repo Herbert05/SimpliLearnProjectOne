@@ -51,7 +51,8 @@ public class LockedMe {
 
             int lineCounts;
             System.out.println("Enter number of lines that your file will contain: ");
-            lineCounts = obj.nextInt();
+            //Use parser instead of nextInt to avoid the script from skipping first line
+            lineCounts = Integer.parseInt(obj.nextLine());
 
             FileWriter fileWriter = new FileWriter(projectFilesPath + FileSystems.getDefault().getSeparator() + fileName + ".txt");
 
@@ -64,6 +65,8 @@ public class LockedMe {
             }
             fileWriter.close();
             System.out.println("File created successfully");
+        }catch (NumberFormatException ex){
+            System.out.println("Number Error: " + ex.getMessage());
         }catch (Exception ex){
             System.out.println("Error: "+ ex.getMessage());
         }
