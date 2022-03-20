@@ -46,15 +46,20 @@ public class LockedMe {
         try{
             Scanner obj = new Scanner(System.in);
             String fileName;
+            String extension = "txt";
             System.out.println("Please enter new file name: ");
             fileName = obj.nextLine();
+
+            System.out.printf("Enter file extension needed, leave empty to leave default [.%s]: ", extension);
+            String userInput = obj.nextLine();
+            extension = userInput.isEmpty()?  extension: userInput;
 
             int lineCounts;
             System.out.println("Enter number of lines that your file will contain: ");
             //Use parser instead of nextInt to avoid the script from skipping first line
             lineCounts = Integer.parseInt(obj.nextLine());
 
-            FileWriter fileWriter = new FileWriter(projectFilesPath + FileSystems.getDefault().getSeparator() + fileName + ".txt");
+            FileWriter fileWriter = new FileWriter(projectFilesPath + FileSystems.getDefault().getSeparator() + fileName + "." + extension);
 
             //Read line by line from user
             String customerEntry;
